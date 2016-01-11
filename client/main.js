@@ -605,7 +605,7 @@ if (game.state != "waitingForPlayers") {
           locations.forEach(function(loc) {
 
                        if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
-                          adminPost(player.name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
+                          adminPost(name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
                           GAnalytics.event("game-actions", "gameend");
                           Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
                          return;
