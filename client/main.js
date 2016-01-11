@@ -581,7 +581,6 @@ if (game.state != "waitingForPlayers") {
             var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
             players.forEach(function(player) {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
-                 //adminPost("KICKING "+player.name.toUpperCase(),game._id);
                  if (player.isSpy) {
                   adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
                  } else {
@@ -600,7 +599,20 @@ if (game.state != "waitingForPlayers") {
             GAnalytics.event("game-actions", "gameend");
             var game = getCurrentGame();
             Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+
           }
+            if (message.value.toUpperCase() !== TAPi18n.__(game.location.name).toUpperCase()) {
+          locations.forEach(function(loc) {
+
+                       if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
+                          adminPost(player.name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
+                          GAnalytics.event("game-actions", "gameend");
+                          Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+                         return;
+                         }
+                      });
+        }
+
           }
         }
           //alert(message.value);

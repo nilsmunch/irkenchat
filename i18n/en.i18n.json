@@ -1,4 +1,5 @@
 {
+    "null":"New player",
     "ui": {
         "welcome to spyfall": "Welcome!",
         "new game": "New Game",
@@ -11,7 +12,8 @@
         "show hide": "show/hide",
         "you are the spy": "You are the <strong>chat bot</strong>!",
         "spy instructions":"Join the conversation, figure out what location this is, and don't let them catch you!",
-        "nonspy instructions":"Join the conversation, but dont make it too obvious where you are or what you are, since that would aid the chat bot.<br><br>Vote the chat bot out when you believe you have found him, but you all need to vote against one player, or he will get away...",
+        "nonspy instructions":"Join the conversation, but dont make it too obvious where you are or what you are, since that would aid the chat bot.
+        <br><br>If you are certain you know who the chatbot is, you can use the <b>/kick</b> command, followed by his name. But be careful, if you kick a fellow human, all humans loose.",
         "you are not the spy": "You are a normal <strong>human</strong>!",
         "how to play":"3-6 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot invader, who has no idea where he is, or who the other characters are.<br><br>
         Players can then have a conversation, ask eachother questions, or talk as they see fit. Private whispering is NOT allowed.<br><br>
