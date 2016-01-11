@@ -11,15 +11,16 @@
         "leave game": "Leave Game",
         "show hide": "show/hide",
         "you are the spy": "You are the <strong>chat bot</strong>!",
-        "spy instructions":"Join the conversation, figure out what location this is, and don't let them catch you!",
+        "spy instructions":"Join the conversation, figure out what location this is, and don't let them catch you!<br>When you have a guess, type it directly into the chat box.",
         "nonspy instructions":"Join the conversation, but dont make it too obvious where you are or what you are, since that would aid the chat bot.
-        <br><br>If you are certain you know who the chatbot is, you can use the <b>/kick</b> command, followed by his name. But be careful, if you kick a fellow human, all humans loose.",
+        <br><br>If you are certain you know who the chatbot is, you can use the <b>/kick</b> command, followed by the username.",
         "you are not the spy": "You are a normal <strong>human</strong>!",
         "how to play":"3-6 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot, who has no idea where he is, or who the other characters are.<br><br>
         Players can then have a conversation, ask eachother questions, or talk as they see fit. Private whispering is NOT allowed.<br><br>
         The <b>Humans</b> need to figure out who amung them is the chat bot. They have the power to kick other users, but if they guess wrong, their account is revieled, along with their title. They need to kick the bot in order to win. They are supposed to not give away their location, since that would make it easy for the chat bot to blend in.<br>
         <br>The <b>chat bot</b> is supposed to join in the conversation as a normal human, while figuring out at what kind of location the game is taking place,
-        to better blend in. If the time runs out, and he is not caught, the bot wins.<br>
+        to better blend in. If the time runs out, and he is not caught, the bot wins.<br>   <br>
+        Developed by Nils Munch and Evan Brumley<br>Based on <a href='http://www.questionsleep.com'>Invader Zim</a> by Jhonen Vasquez and <a href='http://international.hobbyworld.ru/catalog/25-spyfall/' target='_blank'>Spyfall</a> by Alexandr Ushan.
         ",
         "the location": "The location",
         "your role": "Your role",
@@ -33,7 +34,7 @@
         "enter an access code": "Enter an access code",
         "invalid access code": "Sorry, no game was found with the access code you provided!",
         "join": "Join",
-        "footer": "Developed by Nils Munch and Evan Brumley<br>Based on <a href='http://www.questionsleep.com'>Invader Zim</a> by Jhonen Vasquez and <a href='http://international.hobbyworld.ru/catalog/25-spyfall/' target='_blank'>Spyfall</a> by Alexandr Ushan<br>All artwork &copy; 2015 Jhonen Vasquez / Nickelodeon Studios"
+        "footer": "Developed by Nils Munch and Evan Brumley<br>Based on <a href='http://www.questionsleep.com'>Invader Zim</a> by Jhonen Vasquez and <a href='http://international.hobbyworld.ru/catalog/25-spyfall/' target='_blank'>Spyfall</a> by Alexandr Ushan."
     },
     "locations": {
         "airplane": "Airplane",
