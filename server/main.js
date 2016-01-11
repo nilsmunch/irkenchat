@@ -33,6 +33,7 @@ function assignRoles(players, location){
 
   players.forEach(function(player){
     //if (!player.isSpy){
+    player.kicked = false;
       role = shuffled_roles.pop();
 
       if (role === undefined){
@@ -67,11 +68,20 @@ Meteor.publish('players', function(gameID) {
   return Players.find({"gameID": gameID});
 });
 
+
+Games.find({"state": 'waitingForPlayers'}).observeChanges({
+  added: function (id, game) {
+    Games.update(id, {$set: {location: null}});
+  }
+});
+
 Games.find({"state": 'settingUp'}).observeChanges({
   added: function (id, game) {
+    if (game.location != null) return;
     var location = getRandomLocation();
+    Games.update(id, {$set: {location: location}});
     var players = Players.find({gameID: id});
-    var gameEndTime = moment().add(game.lengthInMinutes, 'minutes').valueOf();
+    var gameEndTime = moment().add((players.count() + 2), 'minutes').valueOf();
 
     var spyIndex = Math.floor(Math.random() * players.count());
     var firstPlayerIndex = Math.floor(Math.random() * players.count());
@@ -87,6 +97,15 @@ Games.find({"state": 'settingUp'}).observeChanges({
 
     assignRoles(players, location);
 
-    Games.update(id, {$set: {state: 'inProgress', location: location, endTime: gameEndTime, paused: false, pausedTime: null}});
+    var shuffled_locs = shuffleArray(locations);
+    var loccandidates = [location];
+    shuffled_locs.forEach(function(loc){
+        if (location != loc && loccandidates.length < 20) loccandidates.push(loc);
+    });
+    loccandidates = shuffleArray(loccandidates);
+
+    var kickcooldown = moment().add(30, 'seconds').valueOf();
+
+    Games.update(id, {$set: {state: 'inProgress', location: location,loccandidates: loccandidates, cooldown: kickcooldown, endTime: gameEndTime, paused: false, pausedTime: null}});
   }
 });

@@ -29,6 +29,9 @@ Template.players.helpers({
       if (player.role == "SPECTATOR") {
         return;
       }
+      if (player.kicked) {
+        return;
+      }
 
       if (player._id === currentPlayer._id){
         player.isCurrent = true;
@@ -499,6 +502,25 @@ Template.lobby.rendered = function (event) {
   qrcodesvg.draw();
 };
 
+function getTimeCooldown(){
+  var game = getCurrentGame();
+  var localEndTime = game.cooldown - TimeSync.serverOffset();
+    var cooldownTime = game.cooldown - Session.get('time');
+
+  if (game.paused){
+    var localPausedTime = game.pausedTime - TimeSync.serverOffset();
+    var timeRemaining = localEndTime - localPausedTime;
+  } else {
+    var timeRemaining = localEndTime - Session.get('time');
+  }
+
+  if (timeRemaining < 0) {
+    timeRemaining = 0;
+  }
+
+  return timeRemaining;
+}
+
 function getTimeRemaining(){
   var game = getCurrentGame();
   var localEndTime = game.endTime - TimeSync.serverOffset();
@@ -534,13 +556,22 @@ Template.gameView.helpers({
     return players;
   },
   locations: function () {
-    return locations;
+    var game = getCurrentGame();
+    return game.loccandidates;
   },
   gameFinished: function () {
     var timeRemaining = getTimeRemaining();
 
     return timeRemaining === 0;
   },
+
+  kicker: function () {
+    var cooldownTime =getTimeCooldown();
+    if (cooldownTime == 0) return "Ready";
+    return moment(cooldownTime).format('mm[<span>:</span>]ss');
+  }
+
+  ,
   timeRemaining: function () {
     var timeRemaining = getTimeRemaining();
 
@@ -567,6 +598,10 @@ function adminPost(message,game) {
         var message = document.getElementById('message');
 
         var currentPlayer = getCurrentPlayer();
+        if (currentPlayer.kicked) return;
+      if (currentPlayer.role == "SPECTATOR") {
+        return;
+      }
         name = currentPlayer.name;
         if (message.value != '') {
           Messages.insert({
@@ -576,18 +611,27 @@ function adminPost(message,game) {
             time: Date.now(),
           });
 
-if (game.state != "waitingForPlayers") {
+        if (game.state != "waitingForPlayers") {
           if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
+              var cooldownTime = getTimeCooldown();
+                  if (cooldownTime > 0) return;
             var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
+
             players.forEach(function(player) {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
                  if (player.isSpy) {
                   adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
-                 } else {
-                  adminPost(player.name.toUpperCase()+" WAS INNOCENT! HUMANS LOST THE GAME! LONG LIVE CHATBOT!",game._id);
-                 }
                   GAnalytics.event("game-actions", "gameend");
                   Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+                  return;
+                 } else {
+                  adminPost(currentPlayer.name.toUpperCase()+" KICKED "+player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+".",game._id);
+                    Players.update(player._id, {$set: {kicked: true}});
+
+                     var cooldown = moment().add(15, 'seconds').valueOf();
+                    Games.update(game._id, {$set: {cooldown: cooldown}});
+                  return;
+                 }
              }
             });
           }

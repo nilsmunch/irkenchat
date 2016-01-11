@@ -64,6 +64,8 @@
         "supermarket": "The Mall",
         "theater": "Theater",
         "university": "University",
+        "white house": "The White House",
+        "santa workshop": "Santa's Workshop",
         "world war ii squad": "World War II Squad",
         "roles": {
             "airplane": {
@@ -317,7 +319,27 @@
                 "cook": "Cook",
                 "imprisoned nazi": "Imprisoned Nazi",
                 "soldier": "Soldier"
-            }   
+            }                ,
+            "white house": {
+                "president": "President",
+                "first lady": "First Lady",
+                "secret service": "Secret Service",
+                "vice president": "Vice President",
+                "general": "General",
+                "senator": "Senator",
+                "translator": "Translator"     ,
+                "advisor": "Advisor"
+            }               ,
+            "santa workshop": {
+                "santa": "Santa Claus",
+                "reindeer": "Reindeer",
+                "mrs claus": "Mrs Claus",
+                "rudolph": "Rudolph",
+                "snowman": "Frosty the Snowman",
+                "toymaker": "Toymaker",
+                "mailman": "Mailman"     ,
+                "elf": "Elf"
+            }
         }
     }
 }
