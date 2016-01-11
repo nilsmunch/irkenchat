@@ -10,6 +10,17 @@ function cleanUpGamesAndPlayers(){
   });
 }
 
+  Meteor.methods({
+        postChat: function (guy,message,game) {
+          Messages.insert({
+            name: guy,
+            game:game,
+            message: message,
+            time: moment().valueOf(),
+          });
+        }
+    });
+
 function getRandomLocation(){
   var locationIndex = Math.floor(Math.random() * locations.length);
   return locations[locationIndex];
@@ -40,7 +51,7 @@ function assignRoles(players, location){
         role = default_role;
       }
 
-      Players.update(player._id, {$set: {role: role}});
+      Players.update(player._id, {$set: {role: role,kicked : false}});
    // }
   });
 }
@@ -64,6 +75,8 @@ Meteor.publish('messages', function(gameID) {
   return Messages.find({"game": gameID}, { sort: { time: -1}});
 });
 
+
+
 Meteor.publish('players', function(gameID) {
   return Players.find({"gameID": gameID});
 });
@@ -74,6 +87,7 @@ Games.find({"state": 'waitingForPlayers'}).observeChanges({
     Games.update(id, {$set: {location: null}});
   }
 });
+
 
 Games.find({"state": 'settingUp'}).observeChanges({
   added: function (id, game) {

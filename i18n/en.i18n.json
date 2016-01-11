@@ -273,6 +273,7 @@
                 "commander": "Commander",
                 "scientist": "Scientist",
                 "doctor": "Doctor",
+                "alien": "Alien",
                 "space tourist": "Space Tourist"
             },
             "submarine": {

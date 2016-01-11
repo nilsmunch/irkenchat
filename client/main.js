@@ -35,7 +35,10 @@ Template.players.helpers({
 
       if (player._id === currentPlayer._id){
         player.isCurrent = true;
-        if (me.isSpy) player.role = 'CHAT BOT';
+        if (me.isSpy) {
+            player.role = 'CHAT BOT';
+            return;
+        }
       } else {
         if (game.state != "waitingForPlayers") player.role = 'Unknown';
       }
@@ -579,15 +582,22 @@ Template.gameView.helpers({
   }
 });
 
+function filePost(guy,message,game) {
+    Meteor.call("postChat",guy,message,game, function (error, result) {
+            });
+}
 
+function narratorPost(message,game) {
+
+    filePost("Narrator",message,game);
+
+}
 function adminPost(message,game) {
-          Messages.insert({
-            name: "ADMN",
-            game:game,
-            message: message,
-            time: Date.now(),
-          });
+    filePost("ADMN",message,game);
+}
 
+function clock() {
+    return TimeSync.serverTime(moment()) - TimeSync.serverOffset();
 }
 
   Template.input.events = {
@@ -604,12 +614,7 @@ function adminPost(message,game) {
       }
         name = currentPlayer.name;
         if (message.value != '') {
-          Messages.insert({
-            name: name,
-            game:game._id,
-            message: message.value,
-            time: Date.now(),
-          });
+             filePost(name,message.value,game._id);         
 
         if (game.state != "waitingForPlayers") {
           if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
@@ -621,6 +626,7 @@ function adminPost(message,game) {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
                  if (player.isSpy) {
                   adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
+                  narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
                   GAnalytics.event("game-actions", "gameend");
                   Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
                   return;
@@ -650,6 +656,7 @@ function adminPost(message,game) {
 
                        if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
                           adminPost(name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
+                            narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
                           GAnalytics.event("game-actions", "gameend");
                           Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
                          return;
