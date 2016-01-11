@@ -82,6 +82,8 @@ input.message-to-send {width:100% !important;margin-bottom:0px !important;}
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
   color: #434651;
+  top:0px;bottom:0px;right:0px;
+  position:absolute;
 }
 .chat .chat-header {
   padding: 20px;
@@ -110,9 +112,9 @@ input.message-to-send {width:100% !important;margin-bottom:0px !important;}
 }
 .chat .chat-history {
   padding: 30px 30px 20px;
-  border-bottom: 2px solid white;
-  overflow-y: scroll;
-  height: 50vh;
+  position:absolute;
+  overflow-y: hidden;
+  bottom:60px;  top:90px;   left:0px;right:0px;
 }
 .chat .chat-history .message-data {
   margin-bottom: 15px;
@@ -151,11 +153,11 @@ input.message-to-send {width:100% !important;margin-bottom:0px !important;}
   background: #94C2ED;
 }
 .chat .chat-history .other-message:after {
-  border-bottom-color: #94C2ED;
   left: 93%;
 }
 .chat .chat-message {
   padding: 20px;
+  position:absolute;bottom:0px;left:0px;right:0px;
 }
 .chat .chat-message textarea {
   width: 100%;

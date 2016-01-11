@@ -15,12 +15,11 @@
         "nonspy instructions":"Join the conversation, but dont make it too obvious where you are or what you are, since that would aid the chat bot.
         <br><br>If you are certain you know who the chatbot is, you can use the <b>/kick</b> command, followed by his name. But be careful, if you kick a fellow human, all humans loose.",
         "you are not the spy": "You are a normal <strong>human</strong>!",
-        "how to play":"3-6 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot invader, who has no idea where he is, or who the other characters are.<br><br>
+        "how to play":"3-6 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot, who has no idea where he is, or who the other characters are.<br><br>
         Players can then have a conversation, ask eachother questions, or talk as they see fit. Private whispering is NOT allowed.<br><br>
-        The <b>Humans</b> need to figure out who amung them is the chat bot. They can put it to a vote, and if all but the accused vote for an elimination, they have either won if they were correct, or lost 
-        if they were wrong. They are supposed to not give away their location, since that would make it easy for the chat bot to blend in.<br>
-        <br>The <b>chat bot invader</b> is supposed to join in the conversation as a normal earthling, while figuring out at what kind of location the game is taking place,
-        to better blend in. If the time runs out, and he is not caught, the invader wins. He also wins if the players eliminate the wrong person.<br>
+        The <b>Humans</b> need to figure out who amung them is the chat bot. They have the power to kick other users, but if they guess wrong, their account is revieled, along with their title. They need to kick the bot in order to win. They are supposed to not give away their location, since that would make it easy for the chat bot to blend in.<br>
+        <br>The <b>chat bot</b> is supposed to join in the conversation as a normal human, while figuring out at what kind of location the game is taking place,
+        to better blend in. If the time runs out, and he is not caught, the bot wins.<br>
         ",
         "the location": "The location",
         "your role": "Your role",

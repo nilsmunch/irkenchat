@@ -8,7 +8,10 @@ Template.messages.helpers({
     messages: function() {
 
         var game = getCurrentGame();
-        return Messages.find({"game":game._id}, { sort: { time: -1}});
+
+  var element = document.getElementById("chat");
+        element.scrollTop = element.scrollHeight;
+        return Messages.find({"game":game._id}, { sort: { time: 1}}).fetch();
     }
 });
 
@@ -152,7 +155,7 @@ function generateAccessCode(){
   var code = "";
   var possible = "abcdefghijklmnopqrstuvwxyz";
 
-    for(var i=0; i < 6; i++){
+    for(var i=0; i < 3; i++){
       code += possible.charAt(Math.floor(Math.random() * possible.length));
     }
 
@@ -183,6 +186,7 @@ function generateNewPlayer(game, name){
     name: name,
     role: null,
     isSpy: false,
+    score :0,
     isFirstPlayer: false
   };
 
@@ -614,7 +618,7 @@ function clock() {
       }
         name = currentPlayer.name;
         if (message.value != '') {
-             filePost(name,message.value,game._id);         
+             filePost(name,message.value,game._id);
 
         if (game.state != "waitingForPlayers") {
           if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
@@ -626,6 +630,8 @@ function clock() {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
                  if (player.isSpy) {
                   adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
+                  Players.update(currentPlayer._id, {$inc: {score: 1}});
+                  Players.update(player._id, {$inc: {score: -1}});
                   narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
                   GAnalytics.event("game-actions", "gameend");
                   Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
@@ -633,6 +639,7 @@ function clock() {
                  } else {
                   adminPost(currentPlayer.name.toUpperCase()+" KICKED "+player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+".",game._id);
                     Players.update(player._id, {$set: {kicked: true}});
+                    Players.update(currentPlayer._id, {$inc: {score: -1}});
 
                      var cooldown = moment().add(15, 'seconds').valueOf();
                     Games.update(game._id, {$set: {cooldown: cooldown}});
@@ -645,6 +652,7 @@ function clock() {
           if (currentPlayer.isSpy) {
             if (message.value.toUpperCase() == TAPi18n.__(game.location.name).toUpperCase()) {
             adminPost(name.toUpperCase()+" THE CHAT BOT WON THE GAME!",game._id);
+            Players.update(currentPlayer._id, {$inc: {score:2}});
 
             GAnalytics.event("game-actions", "gameend");
             var game = getCurrentGame();
@@ -656,6 +664,7 @@ function clock() {
 
                        if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
                           adminPost(name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
+                            Players.update(currentPlayer._id, {$inc: {score: -1}});
                             narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
                           GAnalytics.event("game-actions", "gameend");
                           Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
