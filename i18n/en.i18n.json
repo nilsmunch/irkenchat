@@ -1,7 +1,7 @@
 {
     "null":"New player",
     "ui": {
-        "welcome to spyfall": "Welcome!",
+        "welcome to spyfall": "Who's the bot ?",
         "new game": "New Game",
         "join game": "Join Game",
         "waiting for players": "Game lobby",
@@ -9,18 +9,18 @@
         "join my spyfall game": "Join my Spyfall game!",
         "start game": "Start Game",
         "leave game": "Leave Game",
-        "show hide": "show/hide",
+        "show hide": "instructions",
         "you are the spy": "You are the <strong>chat bot</strong>!",
         "spy instructions":"Join the conversation, figure out what location this is, and don't let them catch you!<br>When you have a guess, type it directly into the chat box.",
         "nonspy instructions":"Join the conversation, but dont make it too obvious where you are or what you are, since that would aid the chat bot.
         <br><br>If you are certain you know who the chatbot is, you can use the <b>/kick</b> command, followed by the username.",
         "you are not the spy": "You are a normal <strong>human</strong>!",
-        "how to play":"3-6 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot, who has no idea where he is, or who the other characters are.<br><br>
-        Players can then have a conversation, ask eachother questions, or talk as they see fit. Private whispering is NOT allowed.<br><br>
-        The <b>Humans</b> need to figure out who amung them is the chat bot. They have the power to kick other users, but if they guess wrong, their account is revieled, along with their title. They need to kick the bot in order to win. They are supposed to not give away their location, since that would make it easy for the chat bot to blend in.<br>
-        <br>The <b>chat bot</b> is supposed to join in the conversation as a normal human, while figuring out at what kind of location the game is taking place,
+        "how to play":"3-9 players join a game, and will be assigned a shared location, and seperate roles in that location. But one of them is an chat bot, who has no idea where he is, or who the other characters are.<br><br>
+        <h4>Rules</h4>The humans will have around 5 minutes (varies with number of players) to sniff out the chat bot among them. They can have a conversation, ask eachother questions, or talk as they see fit. Private whispering is NOT allowed.<br><br>
+        The <b>Humans</b> need to figure out who amung them is the chat bot. They have the power to kick other users, but if they guess wrong, their account is revealed, and the kick takes 10 seconds to recharge. They need to kick the bot in order to win. They are supposed to not give away their location, since that would make it easy for the chat bot to blend in.<br>
+        <br>The <b>Chat-bot</b> is supposed to join in the conversation as a normal human, while figuring out at what kind of location the game is taking place,
         to better blend in. If the time runs out, and he is not caught, the bot wins.<br>   <br>
-        Developed by Nils Munch and Evan Brumley<br>Based on <a href='http://www.questionsleep.com'>Invader Zim</a> by Jhonen Vasquez and <a href='http://international.hobbyworld.ru/catalog/25-spyfall/' target='_blank'>Spyfall</a> by Alexandr Ushan.
+        <h4>Credits</h4>Developed by Nils Munch and Evan Brumley<br>Based on the impro exercise Out of Place and <a href='http://international.hobbyworld.ru/catalog/25-spyfall/' target='_blank'>Spyfall</a> by Alexandr Ushan.
         ",
         "the location": "The location",
         "your role": "Your role",
@@ -67,6 +67,14 @@
         "white house": "The White House",
         "santa workshop": "Santa's Workshop",
         "world war ii squad": "World War II Squad",
+        "pyramids": "Pyramids",
+        "zoo": "Zoo",
+        "olympics": "Olympics",
+        "wizardschool":"Wizard School",
+        "funeral":"Funeral",
+        "prison":"Prison",
+        "comicon":"Comicon",
+        "deathstar":"Death star",
         "roles": {
             "airplane": {
                 "first class passenger": "1st Class Passenger",
@@ -341,6 +349,100 @@
                 "mailman": "Mailman"     ,
                 "elf": "Elf"
             }
+            ,
+            "pyramids": {
+                "pharao": "Pharao",
+                "high priest": "High priest",
+                "drummer": "Mathematician",
+                "architect": "Architect",
+                "vizier": "Vizier",
+                "slavemaster": "Slavemaster",
+                "slave": "Slave"
+            }
+            ,
+            "zoo": {
+                "zookeeper": "zookeeper",
+                "liontamer": "liontamer",
+                "penguin": "penguin",
+                "zebra": "zebra",
+                "giraffe": "giraffe",
+                "biologist": "biologist",
+                "visitor": "visitor"
+            }
+            ,
+            "olympics": {
+                "reporter": "reporter",
+                "athlete": "athlete",
+                "runner": "runner",
+                "commentator": "commentator",
+                "coach": "coach",
+                "swimmer": "swimmer",
+                "spectator": "spectator"
+            }
+            ,
+            "wizardschool": {
+                "wizard": "wizard",
+                "witch": "witch",
+                "headmaster": "headmaster",
+                "groundskeeper": "groundskeeper",
+                "potion master": "potion master",
+                "herbologist": "herbologist",
+                "student": "student"
+            }
+            ,
+            "funeral": {
+                "widow": "widow",
+                "priest": "priest",
+                "gravedigger": "gravedigger",
+                "lawyer": "lawyer",
+                "polebearer": "polebearer",
+                "coroner": "coroner",
+                "mourner": "mourner"
+            }
+            ,
+            "prison": {
+                "warden": "warden",
+                "guard": "guard",
+                "chef": "chef",
+                "gang leader": "gang leader",
+                "escape artist": "escape artist",
+                "psychologist": "psychologist",
+                "inmate": "inmate"
+            }
+            ,
+            "comicon": {
+                "stan lee": "Stan Lee",
+                "cosplayer": "cosplayer",
+                "comic book artist": "comic book artist",
+                "actor": "actor",
+                "voice actor": "voice actor",
+                "nathan fillon": "nathan fillon",
+                "fan": "fan"
+            }
+            ,
+            "deathstar": {
+                "darth vader": "darth vader",
+                "emperor": "emperor",
+                "rebels": "rebels",
+                "princess": "princess",
+                "jedi master": "jedi master",
+                "xwing pilot": "xwing pilot",
+                "stormtrooper": "stormtrooper"
+            }
+
+
+/*
+      'locations.roles.deathstar.darth vader',
+      'locations.roles.deathstar.emperor',
+      'locations.roles.deathstar.rebels',
+      'locations.roles.deathstar.princess',
+      'locations.roles.deathstar.jedi master',
+      'locations.roles.deathstar.xwing pilot',
+      'locations.roles.deathstar.stormtrooper'
+
+    */
+
+
         }
     }
 }
