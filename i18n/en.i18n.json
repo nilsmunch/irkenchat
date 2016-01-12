@@ -74,7 +74,14 @@
         "funeral":"Funeral",
         "prison":"Prison",
         "comicon":"Comicon",
-        "deathstar":"Death star",
+        "deathstar":"Death Star",
+        "rock concert":"Rock Concert",
+        "wild west saloon":"Wild West Saloon",
+        "aquarium":"Aquarium",
+        "mafia":"Mafia Meeting",
+        "fairytale":"Fairytale",
+        "magicshow":"Magic Show",
+        "murderscene":"Crime Scene",
         "roles": {
             "airplane": {
                 "first class passenger": "1st Class Passenger",
@@ -361,84 +368,160 @@
             }
             ,
             "zoo": {
-                "zookeeper": "zookeeper",
-                "liontamer": "liontamer",
-                "penguin": "penguin",
-                "zebra": "zebra",
-                "giraffe": "giraffe",
-                "biologist": "biologist",
-                "visitor": "visitor"
+                "zookeeper": "Zookeeper",
+                "liontamer": "Lion tamer",
+                "penguin": "Penguin",
+                "zebra": "Zebra",
+                "giraffe": "Giraffe",
+                "biologist": "Biologist",
+                "visitor": "Visitor"
             }
             ,
             "olympics": {
-                "reporter": "reporter",
-                "athlete": "athlete",
-                "runner": "runner",
-                "commentator": "commentator",
-                "coach": "coach",
-                "swimmer": "swimmer",
-                "spectator": "spectator"
+                "reporter": "Reporter",
+                "athlete": "Athlete",
+                "runner": "Runner",
+                "commentator": "Commentator",
+                "coach": "Coach",
+                "swimmer": "Swimmer",
+                "spectator": "Spectator"
             }
             ,
             "wizardschool": {
-                "wizard": "wizard",
-                "witch": "witch",
-                "headmaster": "headmaster",
-                "groundskeeper": "groundskeeper",
-                "potion master": "potion master",
-                "herbologist": "herbologist",
-                "student": "student"
+                "wizard": "Wizard",
+                "witch": "Witch",
+                "headmaster": "Headmaster",
+                "groundskeeper": "Groundskeeper",
+                "potion master": "Potion master",
+                "herbologist": "Herbologist",
+                "student": "Student"
             }
             ,
             "funeral": {
-                "widow": "widow",
-                "priest": "priest",
-                "gravedigger": "gravedigger",
-                "lawyer": "lawyer",
-                "polebearer": "polebearer",
-                "coroner": "coroner",
-                "mourner": "mourner"
+                "widow": "Widow",
+                "priest": "Priest",
+                "gravedigger": "Gravedigger",
+                "lawyer": "Lawyer",
+                "polebearer": "Polebearer",
+                "coroner": "Coroner",
+                "mourner": "Mourner"
             }
             ,
             "prison": {
-                "warden": "warden",
-                "guard": "guard",
-                "chef": "chef",
-                "gang leader": "gang leader",
-                "escape artist": "escape artist",
-                "psychologist": "psychologist",
-                "inmate": "inmate"
+                "warden": "Warden",
+                "guard": "Guard",
+                "chef": "Chef",
+                "gang leader": "Gang leader",
+                "escape artist": "Escape artist",
+                "psychologist": "Psychologist",
+                "inmate": "Inmate"
             }
             ,
             "comicon": {
                 "stan lee": "Stan Lee",
-                "cosplayer": "cosplayer",
-                "comic book artist": "comic book artist",
-                "actor": "actor",
-                "voice actor": "voice actor",
-                "nathan fillon": "nathan fillon",
-                "fan": "fan"
+                "cosplayer": "Cosplayer",
+                "comic book artist": "Comic book artist",
+                "actor": "Actor",
+                "voice actor": "Voice actor",
+                "nathan fillon": "Nathan Fillon",
+                "fan": "Fan"
             }
             ,
             "deathstar": {
-                "darth vader": "darth vader",
-                "emperor": "emperor",
-                "rebels": "rebels",
-                "princess": "princess",
-                "jedi master": "jedi master",
-                "xwing pilot": "xwing pilot",
-                "stormtrooper": "stormtrooper"
+                "darth vader": "Darth Vader",
+                "emperor": "Emperor",
+                "rebels": "Rebels",
+                "princess": "Princess",
+                "jedi master": "Jedi master",
+                "xwing pilot": "X-Wing pilot",
+                "stormtrooper": "Stormtrooper"
+            }
+            ,
+            "rock concert": {
+                "lead singer": "Lead singer",
+                "drummer": "Drummer",
+                "guitarist": "Guitarist",
+                "headbanger": "Headbanger",
+                "groupie": "Groupie",
+                "pyro technician": "Pyro technician",
+                "fan": "Fan"
+            }
+/* */
+            ,
+            "wild west saloon": {
+                "sheriff": "Sheriff",
+                "undertaker": "Undertaker",
+                "piano player": "Piano player",
+                "bartender": "Bartender",
+                "bandit": "Bandit",
+                "cattle thief": "Cattle Thief",
+                "cowboy": "Cowboy"
+            }
+            ,
+            "aquarium": {
+                "marine biologist": "Marine Biologist",
+                "promoter": "Promoter",
+                "dolphin": "Dolphin",
+                "diver": "Diver",
+                "veterinarian": "Veterinarian",
+                "gift shop clerk": "Gift shop clerk",
+                "visitor": "Visitor"
+            }
+            ,
+            "mafia": {
+                "don": "Don",
+                "driver": "Driver",
+                "hitman": "Hitman",
+                "fence": "Fence",
+                "undercover cop": "Undercover cop",
+                "femme fatale": "Femme fatale",
+                "mobster": "Mobster"
+            }
+            ,
+            "fairytale": {
+                "witch": "Witch",
+                "little girl": "Little girl",
+                "wolf": "Wolf",
+                "woodsman": "Woodsman",
+                "stepmother": "Stepmother",
+                "gnome": "Gnome",
+                "fairy": "Fairy"
+            }
+            ,
+            "magicshow": {
+                "magician": "Magician",
+                "assistant": "Assistant",
+                "rabbit": "Rabbit",
+                "volunteer": "Volunteer",
+                "lighting guy": "Lighting guy",
+                "ingenieur": "Ingenieur",
+                "spectator": "Spectator"
+            }
+            ,
+            "murderscene": {
+                "detective":        "Detective",
+                "photographer":     "Photographer",
+                "forensics expert": "Forensics expert",
+                "police officer":   "Police officer",
+                "victims ghost":    "Victims ghost",
+                "investigator":     "Investigator",
+                "witness":          "Witness"
             }
 
-
 /*
-      'locations.roles.deathstar.darth vader',
-      'locations.roles.deathstar.emperor',
-      'locations.roles.deathstar.rebels',
-      'locations.roles.deathstar.princess',
-      'locations.roles.deathstar.jedi master',
-      'locations.roles.deathstar.xwing pilot',
-      'locations.roles.deathstar.stormtrooper'
+  {
+  {
+    name: 'locations.murderscene',
+    roles: [
+      'locations.roles.murderscene.detective',
+      'locations.roles.murderscene.photographer',
+      'locations.roles.murderscene.forensics expert',
+      'locations.roles.murderscene.police officer',
+      'locations.roles.murderscene.victims ghost',
+      'locations.roles.murderscene.investigator',
+      'locations.roles.murderscene.witness'
+    ]
+  },
 
     */
 

@@ -114,10 +114,18 @@ Games.find({"state": 'settingUp'}).observeChanges({
     var shuffled_locs = shuffleArray(locations);
     var loccandidates = [location];
     shuffled_locs.forEach(function(loc){
+        loc.localname = TAPi18n.__(loc.name);
         if (location != loc && loccandidates.length < 20) loccandidates.push(loc);
     });
     loccandidates = shuffleArray(loccandidates);
 
+
+    loccandidates = _.sortBy(loccandidates, function(image){ return image.localname; });
+/*
+    loccandidates.sort(function(locationA, locationB) {
+        return locationA.name > locationB.name;
+    });
+*/
     var kickcooldown = moment().add(30, 'seconds').valueOf();
 
     Games.update(id, {$set: {state: 'inProgress', location: location,loccandidates: loccandidates, cooldown: kickcooldown, endTime: gameEndTime, paused: false, pausedTime: null}});
