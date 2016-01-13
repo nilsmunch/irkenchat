@@ -73,12 +73,10 @@
         <li class="clearfix">
           <img src="http://api.adorable.io/avatars/60/{{ avatar }}.png" alt="avatar" />
           <div class="about">
-            <div class="name">{{ name }} ({{ score }})</div>
+            <div class="name" style="font-weight:bold">{{ name }}  {{#if kicked }}
+      - KICKED
+      {{/if}} ({{ score }})</div>
             <div class="status">
-
-      {{#if kicked }}
-      KICKED
-      {{/if}}
       {{_ role }}
             </div>
           </div>
@@ -185,7 +183,7 @@ Invite friends by bringing them to :
 <template name="messages">
   {{#each messages}}
     <div class="msg_{{name}}"><strong>{{name}}:</strong> {{message}}</div>
-  {{/each}}      
+  {{/each}}
 </template>
 
 <template name="input">

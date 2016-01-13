@@ -18,6 +18,9 @@ function cleanUpGamesAndPlayers(){
             message: message,
             time: moment().valueOf(),
           });
+        }   ,
+        cooldown: function (game) {
+            Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
         }
     });
 

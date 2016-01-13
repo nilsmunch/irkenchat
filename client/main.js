@@ -9,8 +9,8 @@ Template.messages.helpers({
 
         var game = getCurrentGame();
 
-  var element = document.getElementById("chat");
-        element.scrollTop = element.scrollHeight;
+        var element = document.getElementById("chat");
+        if (element != null) element.scrollTop = element.scrollHeight;
         return Messages.find({"game":game._id}, { sort: { time: 1}}).fetch();
     }
 });
@@ -335,6 +335,8 @@ Template.createGame.events({
 
     var playerName = event.target.playerName.value;
 
+    playerName = playerName.replace(/[^\w\s]/gi, '').trim();
+
     if (!playerName || Session.get('loading')) {
       return false;
     }
@@ -379,6 +381,8 @@ Template.joinGame.events({
 
     var accessCode = event.target.accessCode.value;
     var playerName = event.target.playerName.value;
+
+    playerName = playerName.replace(/[^\w\s]/gi, '').trim();
 
     if (!playerName || Session.get('loading')) {
       return false;
@@ -612,7 +616,7 @@ function clock() {
         var message = document.getElementById('message');
 
         var currentPlayer = getCurrentPlayer();
-        if (currentPlayer.kicked) return;
+        if (currentPlayer.kicked && game.state != "waitingForPlayers") return;
       if (currentPlayer.role == "SPECTATOR") {
         return;
       }
@@ -623,7 +627,11 @@ function clock() {
         if (game.state != "waitingForPlayers") {
           if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
               var cooldownTime = getTimeCooldown();
-                  if (cooldownTime > 0) return;
+                  if (cooldownTime > 0) {
+
+                  narratorPost("Kicker still on cooldown.",game._id);
+                  return;
+                  }
             var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
 
             players.forEach(function(player) {
@@ -641,8 +649,10 @@ function clock() {
                     Players.update(player._id, {$set: {kicked: true}});
                     Players.update(currentPlayer._id, {$inc: {score: -1}});
 
-                     var cooldown = moment().add(15, 'seconds').valueOf();
-                    Games.update(game._id, {$set: {cooldown: cooldown}});
+                    Meteor.call("cooldown",game._id, function (error, result) {
+            });
+
+
                   return;
                  }
              }
@@ -652,7 +662,7 @@ function clock() {
           if (currentPlayer.isSpy) {
             if (message.value.toUpperCase() == TAPi18n.__(game.location.name).toUpperCase()) {
             adminPost(name.toUpperCase()+" THE CHAT BOT WON THE GAME!",game._id);
-            Players.update(currentPlayer._id, {$inc: {score:2}});
+            Players.update(currentPlayer._id, {$inc: {score:1}});
 
             GAnalytics.event("game-actions", "gameend");
             var game = getCurrentGame();
