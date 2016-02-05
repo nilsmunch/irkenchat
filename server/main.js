@@ -18,11 +18,9 @@ function cleanUpGamesAndPlayers(){
             message: message,
             time: moment().valueOf(),
           });
-<<<<<<< Updated upstream
         }   ,
         cooldown: function (game) {
             Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
-=======
         },
         scanKick: function (game) {
           Messages.insert({
@@ -31,7 +29,6 @@ function cleanUpGamesAndPlayers(){
             message: "scanning...",
             time: moment().valueOf(),
           });
->>>>>>> Stashed changes
         }
     });
 
