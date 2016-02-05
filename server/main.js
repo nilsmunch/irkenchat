@@ -47,13 +47,7 @@ function narratorMessage(gameid,content) {
           });
           cap--;
 
-          Messages.insert({
-            name: "GAME",
-            game:game,
-            message: caster.name+" votes to kick "+target+" / Needs "+cap+" votes to get kicked",
-            time: moment().valueOf(),
-          });
-          narratorMessage(game,caster.name+" votes to kick "+target+" / Needs "+cap+" votes to get kicked");
+          narratorMessage(game,caster.name+" votes to kick "+target+" - "+cap+" votes needed to get kicked");
 
           var numOfTrue = 0;
           players.forEach(function(player, index){
@@ -70,17 +64,20 @@ function narratorMessage(gameid,content) {
 
             if (numOfTrue >= cap) {
                  if (player.isSpy) {
-                  Messages.insert({
-                    name: "GAME",game:game,
-                    message: player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",
-                    time: moment().valueOf(),
-                  });
+                  narratorMessage(game,player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!");
                   //adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
-                  Players.update(caster._id, {$inc: {score: 1}});
-                  Players.update(player._id, {$inc: {score: -1}});
+                  //Players.update(caster._id, {$inc: {score: 1}});
+                  //Players.update(player._id, {$inc: {score: -1}});
                   //narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
                   //GAnalytics.event("game-actions", "gameend");
-                  Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+
+
+                  players.forEach(function(player, index){
+                    if (player.isSpy) return;
+                    Players.update(player._id, {$inc: {score: 1}});
+                  });
+
+                  Games.update(game, {$set: {state: 'waitingForPlayers'}});
                   return;
                  } else {
                   Messages.insert({
@@ -90,7 +87,12 @@ function narratorMessage(gameid,content) {
                   });
                   //adminPost(currentPlayer.name.toUpperCase()+" KICKED "+player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+".",game._id);
                     Players.update(player._id, {$set: {kicked: true}});
-                    Players.update(caster._id, {$inc: {score: -1}});
+
+                    players.forEach(function(player, index){
+                      if (player.isSpy) return;
+                      Players.update(player._id, {$inc: {score: -1}});
+                    });
+
                     Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
                   return;
                  }

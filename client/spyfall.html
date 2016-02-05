@@ -75,11 +75,18 @@
           <div class="about">
             <div class="name" style="font-weight:bold">{{ name }} 
    {{#if kicked }}
-      - KICKED
+      <br>KICKED
       {{else}}
 <br> {{#each loopCount votes}}X&nbsp;{{/each}} 
 
-      <i onclick="$('#message').val('/kick {{name}}');" style="color:red">Vote to kick</i>
+   {{#if votable }}
+      <i onclick="$('#message').val('/kick {{name}}');$('#message').focus();" style="color:red">Vote to kick</i>
+      {{/if}}
+
+   {{#if score }}
+   <div>{{score}} points!</div>
+   {{/if}}
+
       {{/if}} </div>
             <div class="status">
       {{_ role }}
@@ -101,10 +108,12 @@
 Invite friends by bringing them to : 
           <b>http://whosabot.com/{{ game.accessCode }}</b></div>
         </div>
+   {{#if isHost }}
   <div class="button-container">
     <button class="btn-start">{{_ "ui.start game" }}</button>
     <button class="btn-leave">{{_ "ui.leave game" }}</button>
   </div>
+   {{/if}}
   <style>
   body {background-color: silver !important;}
   </style>
@@ -122,7 +131,7 @@ Invite friends by bringing them to :
       {{#if player.isSpy }}
 
         <div class="chat-about">
-          <div class="chat-with">Greetings, chatbot </div>
+          <div class="chat-with">You are the ChatBot!</div>
           <div class="chat-num-messages"> <a class="game-countdown {{#if gameFinished }}finished{{/if}} {{#if game.paused }}paused{{/if}}">{{{ timeRemaining }}}</a> - Kicker : {{{ kicker }}}</div>
         </div>
 
@@ -134,7 +143,7 @@ Invite friends by bringing them to :
   <ul class="location-list">
     {{#each locations }}
       <li>
-        <div class="location-name">{{_ name }}</div>
+        <div class="location-name" onclick="$('#message').val('{{_ name }}');$('#message').focus();" >{{_ name }}</div>
       </li>
     {{/each}}
   </ul>

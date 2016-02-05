@@ -39,6 +39,14 @@ Template.players.helpers({
     var me = getCurrentPlayer();
     players.forEach(function(player){
 
+      player.votable = true;
+      if (game.state != "waitingForPlayers") player.score = 0;
+      if (game.state != "inProgress") player.votable = false;
+      if (player.kicked) player.votable = false;
+      if (player._id == me._id) player.votable = false;
+      if (player.role == "SPECTATOR") player.votable = false;
+      if (me.role == "SPECTATOR") player.votable = false;
+
       if (player.role == "SPECTATOR") {
         return;
       }
@@ -194,12 +202,13 @@ function generateNewPlayer(game, name){
   var player = {
     gameID: game._id,
     avatar:generateAccessCode(),
-    name: name,
+    name: name.toUpperCase(),
     role: null,
     isSpy: false,
     score :0,
     votes :0,
-    isFirstPlayer: false
+    isFirstPlayer: false,
+    votable: true
   };
 
   var playerID = Players.insert(player);
@@ -469,20 +478,26 @@ Template.lobby.helpers({
   player: function () {
     return getCurrentPlayer();
   },
+  isHost: function () {
+    var game = getCurrentGame();
+    var currentPlayer = getCurrentPlayer();
+    if (!game) return false;
+
+    var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
+      return (players[0]._id == currentPlayer._id);
+  }
+
+  ,
   players: function () {
     var game = getCurrentGame();
     var currentPlayer = getCurrentPlayer();
 
-    if (!game) {
-      return null;
-    }
+    if (!game) return null;
 
     var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
 
     players.forEach(function(player){
-      if (player._id === currentPlayer._id){
-        player.isCurrent = true;
-      }
+      player.votable = false;
     });
 
     return players;
@@ -569,9 +584,18 @@ Template.gameView.helpers({
     if (!game){
       return null;
     }
+    var currentPlayer = getCurrentPlayer();
 
     var players = Players.find({
       'gameID': game._id
+    });
+
+    players.forEach(function(player){
+      if (game.state != "waitingForPlayers") player.score = 0;
+      player.votable = false;
+      if (game.state != "waitingForPlayers") player.votable = false;
+      if (player.kicked) player.votable = false;
+      if (player.id == currentPlayer.id) player.votable = false;
     });
 
     return players;
@@ -585,6 +609,16 @@ Template.gameView.helpers({
 
     return timeRemaining === 0;
   },
+  isHost: function () {
+    var game = getCurrentGame();
+    var players = Players.find({
+      'gameID': game._id
+    });
+    var currentPlayer = getCurrentPlayer();
+    return players[0]._id == currentPlayer._id;
+  }
+
+  ,
 
   kicker: function () {
     var cooldownTime =getTimeCooldown();
@@ -642,40 +676,8 @@ function pushMessage() {
           }
         }
         filePost(name,message.value,game._id);
-        message.value = '';
-      }
 
-  Template.input.events = {
-    'keydown input#message' : function (event) {
-      if (event.which == 13) { // 13 is the enter key event
-        pushMessage();
-/*
-            players.forEach(function(player) {
-             if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
-                 if (player.isSpy) {
-                  adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
-                  Players.update(currentPlayer._id, {$inc: {score: 1}});
-                  Players.update(player._id, {$inc: {score: -1}});
-                  narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
-                  GAnalytics.event("game-actions", "gameend");
-                  Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
-                  return;
-                 } else {
-                  adminPost(currentPlayer.name.toUpperCase()+" KICKED "+player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+".",game._id);
-                    Players.update(player._id, {$set: {kicked: true}});
-                    Players.update(currentPlayer._id, {$inc: {score: -1}});
-
-                    Meteor.call("cooldown",game._id, function (error, result) {
-            });
-
-
-                  return;
-                 }
-             }
-            });
-          }
-
-          if (currentPlayer.isSpy) {
+        if (currentPlayer.isSpy) {
             if (message.value.toUpperCase() == TAPi18n.__(game.location.name).toUpperCase()) {
             adminPost(name.toUpperCase()+" THE CHAT BOT WON THE GAME!",game._id);
             Players.update(currentPlayer._id, {$inc: {score:1}});
@@ -683,23 +685,29 @@ function pushMessage() {
             GAnalytics.event("game-actions", "gameend");
             var game = getCurrentGame();
             Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
-
+            return;
           }
-            if (message.value.toUpperCase() !== TAPi18n.__(game.location.name).toUpperCase()) {
           locations.forEach(function(loc) {
-
-                       if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
-                          adminPost(name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
-                            Players.update(currentPlayer._id, {$inc: {score: -1}});
-                            narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
-                          GAnalytics.event("game-actions", "gameend");
-                          Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
-                         return;
-                         }
-                      });
+           if (TAPi18n.__(loc.name).toUpperCase() == message.value.toUpperCase()) {
+              adminPost(name.toUpperCase()+" MISFIRED AND LOST! HUMANS WIN!",game._id);
+                Players.update(currentPlayer._id, {$inc: {score: -1}});
+                narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
+              GAnalytics.event("game-actions", "gameend");
+              Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+             return;
+             }
+          });
         }
-*/
-          //alert(message.value);
+
+
+        message.value = '';
+      }
+
+  Template.input.events = {
+    'keydown input#message' : function (event) {
+      if (event.which == 13) { // 13 is the enter key event
+        pushMessage();
+          
       }
     }
   }
