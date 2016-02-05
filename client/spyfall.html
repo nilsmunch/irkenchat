@@ -73,9 +73,14 @@
         <li class="clearfix">
           <img src="http://api.adorable.io/avatars/60/{{ avatar }}.png" alt="avatar" />
           <div class="about">
-            <div class="name" style="font-weight:bold">{{ name }}  {{#if kicked }}
+            <div class="name" style="font-weight:bold">{{ name }} 
+   {{#if kicked }}
       - KICKED
-      {{/if}} ({{ score }})</div>
+      {{else}}
+<br> {{#each loopCount votes}}X&nbsp;{{/each}} 
+
+      <i onclick="$('#message').val('/kick {{name}}');" style="color:red">Vote to kick</i>
+      {{/if}} </div>
             <div class="status">
       {{_ role }}
             </div>
@@ -100,6 +105,9 @@ Invite friends by bringing them to :
     <button class="btn-start">{{_ "ui.start game" }}</button>
     <button class="btn-leave">{{_ "ui.leave game" }}</button>
   </div>
+  <style>
+  body {background-color: silver !important;}
+  </style>
 </template>
 
 <template name="gameView">
@@ -208,7 +216,7 @@ Invite friends by bringing them to :
   <form id="join-game">  
     <div>
       <input autocorrect="off" autocapitalize="off" type="text" id="access-code" name="accessCode" placeholder='{{_ "ui.enter an access code" }}'>
-      <input type="text" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>
+      <input type="text" maxlength="10" id="player-name" name="playerName" placeholder='{{_ "ui.enter your name" }}'>
 
       {{> flashMessages}}
 

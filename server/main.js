@@ -10,6 +10,15 @@ function cleanUpGamesAndPlayers(){
   });
 }
 
+function narratorMessage(gameid,content) {
+  Messages.insert({
+    name: "GAME",
+    game:gameid,
+    message: content,
+    time: moment().valueOf(),
+  });
+}
+
   Meteor.methods({
         postChat: function (guy,message,game) {
           Messages.insert({
@@ -22,13 +31,76 @@ function cleanUpGamesAndPlayers(){
         cooldown: function (game) {
             Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
         },
-        scanKick: function (game) {
+        scanKick: function (game,target,caster) {
+          Players.update(caster._id, {$set: {
+            votingon: target
+          }});
+
+          var votes = 0;
+          var players = Players.find({gameID: game});
+          var cap = 0;
+          var list = [];
+
+          players.forEach(function(player, index){
+            if (player.votingon != null) list.push(player.votingon);
+            cap++;
+          });
+          cap--;
+
           Messages.insert({
-            name: "server",
+            name: "GAME",
             game:game,
-            message: "scanning...",
+            message: caster.name+" votes to kick "+target+" / Needs "+cap+" votes to get kicked",
             time: moment().valueOf(),
           });
+          narratorMessage(game,caster.name+" votes to kick "+target+" / Needs "+cap+" votes to get kicked");
+
+          var numOfTrue = 0;
+          players.forEach(function(player, index){
+            numOfTrue = 0;
+            for(var i=0;i<list.length;i++){
+                if(list[i].toUpperCase() === player.name.toUpperCase()) numOfTrue++;
+            }
+
+            Players.update(player._id, {$set: {
+              votes: numOfTrue
+            }});
+
+
+
+            if (numOfTrue >= cap) {
+                 if (player.isSpy) {
+                  Messages.insert({
+                    name: "GAME",game:game,
+                    message: player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",
+                    time: moment().valueOf(),
+                  });
+                  //adminPost(player.name.toUpperCase()+" WAS CAUGHT! HUMANS WON THE GAME!",game._id);
+                  Players.update(caster._id, {$inc: {score: 1}});
+                  Players.update(player._id, {$inc: {score: -1}});
+                  //narratorPost("They were at the "+TAPi18n.__(game.location.name),game._id);
+                  //GAnalytics.event("game-actions", "gameend");
+                  Games.update(game._id, {$set: {state: 'waitingForPlayers'}});
+                  return;
+                 } else {
+                  Messages.insert({
+                    name: "GAME",game:game,
+                    message: player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+" WAS KICKED.",
+                    time: moment().valueOf(),
+                  });
+                  //adminPost(currentPlayer.name.toUpperCase()+" KICKED "+player.name.toUpperCase()+" THE "+TAPi18n.__(player.role).toUpperCase()+".",game._id);
+                    Players.update(player._id, {$set: {kicked: true}});
+                    Players.update(caster._id, {$inc: {score: -1}});
+                    Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
+                  return;
+                 }
+          }
+
+    
+          });
+
+
+
         }
     });
 
@@ -113,6 +185,8 @@ Games.find({"state": 'settingUp'}).observeChanges({
 
     players.forEach(function(player, index){
       Players.update(player._id, {$set: {
+        votes: 0,
+        votingon: null,
         isSpy: index === spyIndex,
         isFirstPlayer: index === firstPlayerIndex
       }});

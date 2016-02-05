@@ -16,6 +16,16 @@ Template.messages.helpers({
 });
 
 Template.players.helpers({
+
+  loopCount: function(count){
+    var countArr = [];
+    for (var i=0; i<count; i++){
+      countArr.push({});
+    }
+    return countArr;
+  },
+
+
   players: function () {
     var game = getCurrentGame();
     var currentPlayer = getCurrentPlayer();
@@ -162,9 +172,10 @@ function generateAccessCode(){
     return code;
 }
 
-function generateNewGame(){
+function generateNewGame(code){
+  if (code == null) code = generateAccessCode();
   var game = {
-    accessCode: generateAccessCode(),
+    accessCode: code,
     state: "waitingForPlayers",
     location: null,
     lengthInMinutes: 5,
@@ -187,6 +198,7 @@ function generateNewPlayer(game, name){
     role: null,
     isSpy: false,
     score :0,
+    votes :0,
     isFirstPlayer: false
   };
 
@@ -341,7 +353,7 @@ Template.createGame.events({
       return false;
     }
 
-    var game = generateNewGame();
+    var game = generateNewGame(null);
     var player = generateNewPlayer(game, playerName);
 
     Meteor.subscribe('games', game.accessCode);
@@ -400,23 +412,21 @@ Template.joinGame.events({
         accessCode: accessCode
       });
 
-      if (game) {
-        Meteor.subscribe('players', game._id);
-        Meteor.subscribe('messages', game._id);
-        player = generateNewPlayer(game, playerName);
-
-        if (game.state === "inProgress") {
-          Players.update(player._id, {$set: {role: 'SPECTATOR'}});
-        }
-
-        Session.set('urlAccessCode', null);
-        Session.set("gameID", game._id);
-        Session.set("playerID", player._id);
-        Session.set("currentView", "lobby");
-      } else {
-        FlashMessages.sendError(TAPi18n.__("ui.invalid access code"));
-        GAnalytics.event("game-actions", "invalidcode");
+      if (!game) {
+        game = generateNewGame(accessCode);
       }
+      Meteor.subscribe('players', game._id);
+      Meteor.subscribe('messages', game._id);
+      player = generateNewPlayer(game, playerName);
+
+      if (game.state === "inProgress") {
+        Players.update(player._id, {$set: {role: 'SPECTATOR'}});
+      }
+
+      Session.set('urlAccessCode', null);
+      Session.set("gameID", game._id);
+      Session.set("playerID", player._id);
+      Session.set("currentView", "lobby");
     });
 
     return false;
@@ -608,27 +618,37 @@ function clock() {
     return TimeSync.serverTime(moment()) - TimeSync.serverOffset();
 }
 
+function pushMessage() {
+        var game = getCurrentGame();
+        var message = document.getElementById('message');
+
+        if (message.value == '') return
+
+        var currentPlayer = getCurrentPlayer();
+        name = currentPlayer.name;
+
+        if (currentPlayer.kicked && game.state != "waitingForPlayers") return;
+        if (currentPlayer.role == "SPECTATOR") {alert('Spectators can not speak.');return; }
+
+        if (game.state != "waitingForPlayers") {
+          if (message.value.slice(0,5).toUpperCase() == '/KICK') {
+            //var cooldownTime = getTimeCooldown();
+            ///if (cooldownTime > 0) return;
+            var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
+
+            Meteor.call("scanKick",game._id,message.value.slice(6).toUpperCase(),currentPlayer, function (error, result) {});
+            message.value = '';
+            return;
+          }
+        }
+        filePost(name,message.value,game._id);
+        message.value = '';
+      }
+
   Template.input.events = {
     'keydown input#message' : function (event) {
       if (event.which == 13) { // 13 is the enter key event
-        var game = getCurrentGame();
-        var name = 'Anonymous';
-        var message = document.getElementById('message');
-
-        var currentPlayer = getCurrentPlayer();
-        if (currentPlayer.kicked && game.state != "waitingForPlayers") return;
-        if (currentPlayer.role == "SPECTATOR") return;
-        name = currentPlayer.name;
-        if (message.value != '') {
-             filePost(name,message.value,game._id);
-
-        if (game.state != "waitingForPlayers") {
-          if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
-            var cooldownTime = getTimeCooldown();
-            if (cooldownTime > 0) return;
-            var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
-
-           // Meteor.call("scanKick",game, function (error, result) {});
+        pushMessage();
 /*
             players.forEach(function(player) {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
@@ -679,13 +699,7 @@ function clock() {
                       });
         }
 */
-
-          }
-        }
           //alert(message.value);
-         document.getElementById('message').value = '';
-         message.value = '';
-        }
       }
     }
   }
