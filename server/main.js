@@ -18,9 +18,20 @@ function cleanUpGamesAndPlayers(){
             message: message,
             time: moment().valueOf(),
           });
+<<<<<<< Updated upstream
         }   ,
         cooldown: function (game) {
             Games.update(game, {$set: {cooldown: moment().add(15, 'seconds').valueOf()}});
+=======
+        },
+        scanKick: function (game) {
+          Messages.insert({
+            name: "server",
+            game:game,
+            message: "scanning...",
+            time: moment().valueOf(),
+          });
+>>>>>>> Stashed changes
         }
     });
 
@@ -78,8 +89,6 @@ Meteor.publish('messages', function(gameID) {
   return Messages.find({"game": gameID}, { sort: { time: -1}});
 });
 
-
-
 Meteor.publish('players', function(gameID) {
   return Players.find({"gameID": gameID});
 });
@@ -124,11 +133,7 @@ Games.find({"state": 'settingUp'}).observeChanges({
 
 
     loccandidates = _.sortBy(loccandidates, function(image){ return image.localname; });
-/*
-    loccandidates.sort(function(locationA, locationB) {
-        return locationA.name > locationB.name;
-    });
-*/
+    
     var kickcooldown = moment().add(30, 'seconds').valueOf();
 
     Games.update(id, {$set: {state: 'inProgress', location: location,loccandidates: loccandidates, cooldown: kickcooldown, endTime: gameEndTime, paused: false, pausedTime: null}});

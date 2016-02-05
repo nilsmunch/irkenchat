@@ -616,24 +616,36 @@ function clock() {
         var message = document.getElementById('message');
 
         var currentPlayer = getCurrentPlayer();
+<<<<<<< Updated upstream
         if (currentPlayer.kicked && game.state != "waitingForPlayers") return;
       if (currentPlayer.role == "SPECTATOR") {
         return;
       }
+=======
+        if (currentPlayer.kicked) return;
+        if (currentPlayer.role == "SPECTATOR") return;
+>>>>>>> Stashed changes
         name = currentPlayer.name;
         if (message.value != '') {
              filePost(name,message.value,game._id);
 
         if (game.state != "waitingForPlayers") {
           if (message.value.slice(0,5).toUpperCase() == '/KICK' && !currentPlayer.isSpy) {
+<<<<<<< Updated upstream
               var cooldownTime = getTimeCooldown();
                   if (cooldownTime > 0) {
 
                   narratorPost("Kicker still on cooldown.",game._id);
                   return;
                   }
+=======
+            var cooldownTime = getTimeCooldown();
+            if (cooldownTime > 0) return;
+>>>>>>> Stashed changes
             var players = Players.find({'gameID': game._id}, {'sort': {'createdAt': 1}}).fetch();
 
+           // Meteor.call("scanKick",game, function (error, result) {});
+/*
             players.forEach(function(player) {
              if (player.name.toUpperCase() == message.value.slice(6).toUpperCase()) {
                  if (player.isSpy) {
@@ -682,6 +694,7 @@ function clock() {
                          }
                       });
         }
+*/
 
           }
         }
